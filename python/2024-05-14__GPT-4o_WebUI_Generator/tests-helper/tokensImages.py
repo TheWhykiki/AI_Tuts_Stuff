@@ -6,8 +6,8 @@ def get_base64_image_data(image_path):
         return base64.b64encode(image_file.read()).decode('utf-8')
 
 # Pfade zu den hochgeladenen Bildern
-image_path_1 = 'source-images-tests/orig/sample-1.png'
-image_path_2 = 'source-images-tests/orig/sample-3.png'
+image_path_1 = '../source-images-tests/orig/sample-1.png'
+image_path_2 = '../source-images-tests/orig/sample-3.png'
 
 # Base64-Daten der Bilder
 image_data_1 = get_base64_image_data(image_path_1)

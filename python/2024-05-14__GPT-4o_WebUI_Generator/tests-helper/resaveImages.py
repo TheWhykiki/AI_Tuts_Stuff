@@ -4,10 +4,10 @@ import tiktoken
 import os
 
 # Konfiguration
-source_folder = 'source-images'
-optimized_folder = 'optimized-sources'
-resaved_folder = 'resaved-sources'
-no_exif_folder = 'no-exif-sources'
+source_folder = '../source-images'
+optimized_folder = '../optimized-sources'
+resaved_folder = '../resaved-sources'
+no_exif_folder = '../no-exif-sources'
 
 # Stelle sicher, dass die Ordner existieren
 os.makedirs(optimized_folder, exist_ok=True)

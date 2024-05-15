@@ -9,8 +9,8 @@ def show_image(image_path):
     print(f"Image size: {img.size}, Image mode: {img.mode}")
 
 # Pfade zu den hochgeladenen Bildern
-image_path_1 = 'source-images-tests/orig/sample-1.png'
-image_path_2 = 'source-images-tests/orig/sample-3.png'
+image_path_1 = '../source-images-tests/orig/sample-1.png'
+image_path_2 = '../source-images-tests/orig/sample-3.png'
 
 # Zeige Bild 1
 print("Details for sample-1.png")
