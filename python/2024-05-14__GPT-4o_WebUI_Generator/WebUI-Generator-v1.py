@@ -6,7 +6,6 @@ from IPython.display import Image as IPythonImage, display
 import tiktoken
 
 # Konfiguration
-#api_key = 'YOUR_API_KEY'
 
 chatgpt_endpoint = "https://api.openai.com/v1/chat/completions"
 model_name = 'gpt-4o'
