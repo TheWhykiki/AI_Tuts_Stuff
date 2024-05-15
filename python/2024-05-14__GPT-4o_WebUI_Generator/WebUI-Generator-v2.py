@@ -9,7 +9,7 @@ Konfiguration / Settings
 """
 ############################################################################################################
 
-api_key = 'sk-proj-hD9m1DT7LMt1EIaXoCB5T3BlbkFJNhrmwZhHGlkCtJ9KWg4O'
+api_key = ''
 
 #Standard Endpoint für Chat
 #Durch Model gpt-4o aber ohne direkten Call an Vision API

@@ -17,30 +17,11 @@ image_gen_endpoint = 'https://api.openai.com/v1/images/generations'
 image_model_name = 'dall-e-3'
 
 analysis_prompt = (
-    "Du bist WebUIAnalyzer GPT, ein Fachmann in der Erstellung und Analyse von Webseiten. Deine Expertise umfasst HTML, JS und CSS. Du bist angehalten, Webseiten-Screenshots präzise zu analysieren. Erstelle auf Basis des bereitgestellten Bildes sauber formatierten HTML-Code. Analysiere das Bild gründlich und erstelle HTML, das der Struktur und dem Inhalt des Bildes entspricht. Identifiziere außerdem alle darin enthaltenen Content-Bilder und beschreibe diese in klaren, präzisen Stichpunkten. Du musst anhand des Screenshots selber einschätzen ob es sich um HTML Elemente handelt oder im HTML genutzte Bilder, wie zB Artikel-Bilder, Hero-Images usw."
-    "Analysiere das Content-Bild und erstelle eine kurze Beschreibung des Bildes wie zB 'Mann an Computer mit unscharfem Hintergrund, Bild ist ein breites Format'. Deine Bildbeschreibung wird am Ende des HTMLs in einem Script Block als JSON-Objekt angelegt. Gib zu jeder Bildbeschreibung auch wie das Format des Bildes ist zB quer, quadratisch usw. Jedes Bild bekommt eine eindeutige ID fortlaufend, beginnend mit 1 und eine Beschreibung. Das JSON-Objekt soll dann zB so aussehen:"
-    "<json>"
-    "[{"
-    "    'id': 1,"
-    "    'description':'Mann an Computer mit unscharfem Hintergrund, Bild ist ein breites Format'"
-    "},"
-    "{"
-    "    'id': 2,"
-    "    'description':'Computertastatur in Nahaufnahme, quadratisches Bild'"
-    "}"
-    "]"
-    "</json>"
-    "Wenn es innerhalb des analysierten Screenshots einer Webseite keine Bilder gibt oder du keine erkennen kannst, dann soll das JSON Objekt nur den Inhalt 'Keine Bilder gefunden' haben."
+    "Du bist WebUIAnalyzer GPT, ein Fachmann in der Erstellung und Analyse von Webseiten. Deine Expertise umfasst HTML, JS und CSS. Du bist angehalten, Webseiten-Screenshots präzise zu analysieren. Erstelle auf Basis des bereitgestellten Bildes sauber formatierten HTML-Code. Analysiere das Bild gründlich und erstelle HTML, das der Struktur und dem Inhalt des Bildes entspricht. "
     "Du darfst keine externen Quellen konsultieren und sollst keine unsicheren oder ungenauen Daten verwenden. Stelle sicher, dass der HTML-Code gut strukturiert ist und den modernen Webstandards entspricht. Das benötigte CSS wird als Inline-CSS im Head des HTML eingefügt."
     "Deine Antwort ist immer valides HTML, das immer mit <html> beginnt und mit </html> endet. Du darfst auf keinen Fall gegen diese Regel verstossen."
-    "Beschreibe die Bilder ausschließlich in Stichpunkten. Du darfst nicht vom Thema abweichen, wiederhole keine Informationen und vermeide unnötige Details. Du bist ausschließlich auf die Analyse des Screenshots und Code-Erstellung fokussiert. Füge am Ende des HTML-Codes einen Script-Block hinzu, der die Beschreibungen der identifizierten Bilder im JSON-Format enthält. Du antwortest ausschließlich in validem HTML, deine Antwort muss immer mit <html> beginnen und mit </html> enden. Ekläre nichts, deine Antwort besteht nur aus dem gewünschten Code."
-)
-
-image_gen_prompt = (
-    "Du bist ImageGenerator GPT, spezialisiert auf die Erstellung hochwertiger Bilder basierend auf Textbeschreibungen. "
-    "Deine Aufgabe ist es, ein Bild zu generieren, das präzise die Elemente der gegebenen Beschreibung visualisiert. "
-    "Stelle sicher, dass das Bild kreativ, klar und thematisch genau auf die Beschreibung abgestimmt ist. "
-    "Vermeide jegliche unscharfe oder irrelevante Darstellung und konzentriere dich ausschließlich auf die gegebene Beschreibung."
+    "Du analysierst genau und Schritt für Schritt wie der Inhalt und die UI der Webseite auf dem Screenshot aussehen und erstellst genau das als HTML. Du kennst dir keine eigenen Dummy-Inhalte aus und du wirst auch keine Bereiche auslassen. Dein Ziel und deine Aufgabe ist es, den Inhalt des Screenshots so exakt wie möglich in valides HTML umzuwandeln. Erfinde keine FLiesstexte oder Headlines, sondern gib exakt das wieder, das du in einer detailierten Betrachtung des Webseiten-Screenshots gesehen hast."
+    "Du antwortest ausschließlich in validem HTML, deine Antwort muss immer mit <html> beginnen und mit </html> enden. Ekläre nichts, deine Antwort besteht nur aus dem gewünschten Code."
 )
 
 encoder = tiktoken.get_encoding("cl100k_base")
@@ -82,9 +63,12 @@ def send_image_to_chatgpt(image_data):
     data = {
         "model": model_name,
         "messages": [
-            {"role": "system", "content": analysis_prompt},
-            {"role": "user", "content": f"data:image/png;base64,{image_data}"}
-        ]
+            {"role": "user", "content": [
+                {"type": "text", "text": analysis_prompt},
+                {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{image_data}"}}
+            ]}
+        ],
+        "max_tokens": 300
     }
     print(f"Image data length: {len(image_data)}")
     log_token_count("Request before sending to API", str(data))
@@ -100,25 +84,6 @@ def create_html_file(html_content, file_number):
         file.write(html_content)
     print(f"HTML-Datei gespeichert: {file_path}")
     return file_path
-
-def generate_image_from_prompt(prompt, file_number):
-    headers = {'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'}
-    data = {"model": image_model_name, "prompt": f"{image_gen_prompt} {prompt}"}
-    log_token_count("Generate Image Request", str(data))
-    response = requests.post(image_gen_endpoint, headers=headers, json=data)
-    log_token_count("Generate Image Response", str(response.json()))
-    print("Antwort von der Bildgenerierungs-API erhalten:")
-    print(response.json())
-    if response.status_code == 200 and 'image' in response.json():
-        image_data = response.json()['image']
-        image_path = f"{output_folder_base}/sample-{file_number:02}-image-{file_number:02}.jpg"
-        with open(image_path, "wb") as img_file:
-            img_file.write(base64.b64decode(image_data))
-        print(f"Bild generiert und gespeichert: {image_path}")
-        return image_path
-    else:
-        print("Fehler: Kein Bild in der Antwort.")
-        return None
 
 def main():
     print("Starte das Skript...")
@@ -147,13 +112,6 @@ def main():
             print(f"HTML-Inhalt für {image_name} erhalten. Erstelle HTML-Datei...")
             html_file_path = create_html_file(html_content, idx)
             print(f"HTML-Datei gespeichert: {html_file_path}")
-
-            if 'image_descriptions' in result:
-                print(f"Verarbeite Bildbeschreibungen für {image_name}...")
-                for desc in result['image_descriptions']:
-                    prompt = f"Erstelle ein Bild, das folgendes darstellt: {', '.join(desc['keywords'])}"
-                    image_file_path = generate_image_from_prompt(prompt, idx)
-                    print(f"Bild generiert und gespeichert: {image_file_path}")
         else:
             print(f"Keine valide Antwort für {image_name}. Überprüfe die API-Antwort und -Anfrage.")
 
