@@ -5,10 +5,14 @@ import os
 
 # Konfiguration
 source_folder = 'source-images'
+optimized_folder = 'optimized-sources'
+resaved_folder = 'resaved-sources'
+no_exif_folder = 'no-exif-sources'
 
-# Pfade zu den hochgeladenen Bildern
-image_path_1 = os.path.join(source_folder, 'sample-1.jpg')
-image_path_2 = os.path.join(source_folder, 'sample-3.jpg')
+# Stelle sicher, dass die Ordner existieren
+os.makedirs(optimized_folder, exist_ok=True)
+os.makedirs(resaved_folder, exist_ok=True)
+os.makedirs(no_exif_folder, exist_ok=True)
 
 # Encoder initialisieren
 encoder = tiktoken.get_encoding("cl100k_base")
@@ -35,68 +39,49 @@ def remove_exif(image_path, output_path):
     image_no_exif.putdata(data)
     image_no_exif.save(output_path, "JPEG")
 
-# Pfade zu den optimierten und neu gespeicherten Bildern
-optimized_image_path_1 = os.path.join(source_folder, 'optimized-sample-1.jpg')
-optimized_image_path_2 = os.path.join(source_folder, 'optimized-sample-3.jpg')
-resaved_image_path_1 = os.path.join(source_folder, 'resaved-sample-1.jpg')
-resaved_image_path_2 = os.path.join(source_folder, 'resaved-sample-3.jpg')
-no_exif_image_path_1 = os.path.join(source_folder, 'no-exif-sample-1.jpg')
-no_exif_image_path_2 = os.path.join(source_folder, 'no-exif-sample-3.jpg')
+# Gehe durch alle Bilder im Quellordner
+for filename in os.listdir(source_folder):
+    if filename.endswith(".jpg"):
+        image_path = os.path.join(source_folder, filename)
+        optimized_image_path = os.path.join(optimized_folder, filename)
+        resaved_image_path = os.path.join(resaved_folder, filename)
+        no_exif_image_path = os.path.join(no_exif_folder, filename)
 
-# Optimieren der Bilder
-optimize_image(image_path_1, optimized_image_path_1)
-optimize_image(image_path_2, optimized_image_path_2)
+        # Optimieren der Bilder
+        optimize_image(image_path, optimized_image_path)
 
-# Bild neu speichern
-resave_image(image_path_1, resaved_image_path_1)
-resave_image(image_path_2, resaved_image_path_2)
+        # Bild neu speichern
+        resave_image(image_path, resaved_image_path)
 
-# Entfernen der EXIF-Daten
-remove_exif(image_path_1, no_exif_image_path_1)
-remove_exif(image_path_2, no_exif_image_path_2)
+        # Entfernen der EXIF-Daten
+        remove_exif(image_path, no_exif_image_path)
 
-# Base64-Daten der Originalbilder
-image_data_1 = get_base64_image_data(image_path_1)
-image_data_2 = get_base64_image_data(image_path_2)
+        # Base64-Daten der Originalbilder
+        image_data = get_base64_image_data(image_path)
 
-# Base64-Daten der optimierten Bilder
-optimized_image_data_1 = get_base64_image_data(optimized_image_path_1)
-optimized_image_data_2 = get_base64_image_data(optimized_image_path_2)
+        # Base64-Daten der optimierten Bilder
+        optimized_image_data = get_base64_image_data(optimized_image_path)
 
-# Base64-Daten der neu gespeicherten Bilder
-resaved_image_data_1 = get_base64_image_data(resaved_image_path_1)
-resaved_image_data_2 = get_base64_image_data(resaved_image_path_2)
+        # Base64-Daten der neu gespeicherten Bilder
+        resaved_image_data = get_base64_image_data(resaved_image_path)
 
-# Base64-Daten der Bilder ohne EXIF-Daten
-no_exif_image_data_1 = get_base64_image_data(no_exif_image_path_1)
-no_exif_image_data_2 = get_base64_image_data(no_exif_image_path_2)
+        # Base64-Daten der Bilder ohne EXIF-Daten
+        no_exif_image_data = get_base64_image_data(no_exif_image_path)
 
-# Längen der base64-Daten ausgeben
-print(f"Length of base64 data for sample-1.jpg: {len(image_data_1)}")
-print(f"Length of base64 data for sample-3.jpg: {len(image_data_2)}")
-print(f"Length of base64 data for optimized sample-1.jpg: {len(optimized_image_data_1)}")
-print(f"Length of base64 data for optimized sample-3.jpg: {len(optimized_image_data_2)}")
-print(f"Length of base64 data for resaved sample-1.jpg: {len(resaved_image_data_1)}")
-print(f"Length of base64 data for resaved sample-3.jpg: {len(resaved_image_data_2)}")
-print(f"Length of base64 data for no-exif sample-1.jpg: {len(no_exif_image_data_1)}")
-print(f"Length of base64 data for no-exif sample-3.jpg: {len(no_exif_image_data_2)}")
+        # Längen der base64-Daten ausgeben
+        print(f"Length of base64 data for {filename}: {len(image_data)}")
+        print(f"Length of base64 data for optimized {filename}: {len(optimized_image_data)}")
+        print(f"Length of base64 data for resaved {filename}: {len(resaved_image_data)}")
+        print(f"Length of base64 data for no-exif {filename}: {len(no_exif_image_data)}")
 
-# Token-Anzahl der base64-Daten berechnen
-tokens_image_data_1 = count_tokens(image_data_1)
-tokens_image_data_2 = count_tokens(image_data_2)
-tokens_optimized_image_data_1 = count_tokens(optimized_image_data_1)
-tokens_optimized_image_data_2 = count_tokens(optimized_image_data_2)
-tokens_resaved_image_data_1 = count_tokens(resaved_image_data_1)
-tokens_resaved_image_data_2 = count_tokens(resaved_image_data_2)
-tokens_no_exif_image_data_1 = count_tokens(no_exif_image_data_1)
-tokens_no_exif_image_data_2 = count_tokens(no_exif_image_data_2)
+        # Token-Anzahl der base64-Daten berechnen
+        tokens_image_data = count_tokens(image_data)
+        tokens_optimized_image_data = count_tokens(optimized_image_data)
+        tokens_resaved_image_data = count_tokens(resaved_image_data)
+        tokens_no_exif_image_data = count_tokens(no_exif_image_data)
 
-# Token-Anzahl der base64-Daten ausgeben
-print(f"Token count for base64 data of sample-1.jpg: {tokens_image_data_1}")
-print(f"Token count for base64 data of sample-3.jpg: {tokens_image_data_2}")
-print(f"Token count for base64 data of optimized sample-1.jpg: {tokens_optimized_image_data_1}")
-print(f"Token count for base64 data of optimized sample-3.jpg: {tokens_optimized_image_data_2}")
-print(f"Token count for base64 data of resaved sample-1.jpg: {tokens_resaved_image_data_1}")
-print(f"Token count for base64 data of resaved sample-3.jpg: {tokens_resaved_image_data_2}")
-print(f"Token count for base64 data of no-exif sample-1.jpg: {tokens_no_exif_image_data_1}")
-print(f"Token count for base64 data of no-exif sample-3.jpg: {tokens_no_exif_image_data_2}")
+        # Token-Anzahl der base64-Daten ausgeben
+        print(f"Token count for base64 data of {filename}: {tokens_image_data}")
+        print(f"Token count for base64 data of optimized {filename}: {tokens_optimized_image_data}")
+        print(f"Token count for base64 data of resaved {filename}: {tokens_resaved_image_data}")
+        print(f"Token count for base64 data of no-exif {filename}: {tokens_no_exif_image_data}")
