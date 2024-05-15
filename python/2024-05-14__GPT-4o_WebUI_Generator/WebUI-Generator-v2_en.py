@@ -19,7 +19,7 @@ num_images = 3 # Number of images in the directory to be imported
 image_src_name = 'sample' # Name of the image -> your images should be named sample-1.jpg, sample-3.jpg, ... (or png)
 img_type = 'png' # file type of the images (png or jpg)
 base_url = 'http://youtube.thewhykiki.de/2024-05-14__GPT-4o_WebUI_Generator/source-images/' # Path to the directory with the images
-output_folder_base = 'generator_output'  # local directory for the output of the generated images
+output_folder_base = 'generator_output-klappte'  # local directory for the output of the generated images
 output_folder_images = f'{output_folder_base}/images'  # Directory for the output of the generated images
 
 #Endpoint for Image Generation

@@ -6,12 +6,12 @@ from IPython.display import Image as IPythonImage, display
 import tiktoken
 
 # Konfiguration
-api_key = 'YOUR_API_KEY'
+api_key = 'sk-proj-LhQYuBWERSvVtKInHGhVT3BlbkFJ0yX805EprKcDGgSupH5S'
 
 chatgpt_endpoint = "https://api.openai.com/v1/chat/completions"
 model_name = 'gpt-4o'
-images_folder = 'source-images'
-output_folder_base = 'generator_output'  # Basisverzeichnis für die Ausgabe
+images_folder = 'resaved-sources'
+output_folder_base = 'generator_output-klappte'  # Basisverzeichnis für die Ausgabe
 output_folder_images = f'{output_folder_base}/images'  # Verzeichnis für die Ausgabe der generierten Bilder
 image_gen_endpoint = 'https://api.openai.com/v1/images/generations'
 image_model_name = 'dall-e-3'
@@ -67,8 +67,7 @@ def send_image_to_chatgpt(image_data):
                 {"type": "text", "text": analysis_prompt},
                 {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{image_data}"}}
             ]}
-        ],
-        "max_tokens": 300
+        ]
     }
     print(f"Image data length: {len(image_data)}")
     log_token_count("Request before sending to API", str(data))

@@ -19,7 +19,7 @@ num_images = 3  # Anzahl Bilder im Verzeichnis, die eingelesen werden sollen
 image_src_name = 'sample'  # Name des Bildes -> eure Bilder sollten sample-1.jpg, sample-3.jpg, ... heißen (oder png)
 img_type = 'png' # Dateityp der Bilder (png oder jpg)
 base_url = 'http://youtube.thewhykiki.de/2024-05-14__GPT-4o_WebUI_Generator/source-images/'  # Pfad zum Verzeichnis mit den Bildern
-output_folder_base = 'generator_output'  # Basisverzeichnis für die Ausgabe
+output_folder_base = 'generator_output-klappte'  # Basisverzeichnis für die Ausgabe
 output_folder_images = f'{output_folder_base}/images'  # Verzeichnis für die Ausgabe der generierten Bilder
 
 #Endpoint für Image Generation
