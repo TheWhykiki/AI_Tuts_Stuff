@@ -1,16 +1,18 @@
 import sys
 import os
 import requests
-#import json
 import base64
 from IPython.display import Image as IPythonImage, display
+import tiktoken
 
 # Konfiguration
-api_key = "YOUR_API_KEY"
+api_key = 'sk-proj-hD9m1DT7LMt1EIaXoCB5T3BlbkFJNhrmwZhHGlkCtJ9KWg4O'
+
 chatgpt_endpoint = "https://api.openai.com/v1/chat/completions"
-model_name = 'gpt-4o'
+model_name = 'gpt-4-turbo-2024-04-09'
 images_folder = 'source-images'
-output_folder = 'output-images'
+output_folder_base = 'generator_output'  # Basisverzeichnis für die Ausgabe
+output_folder_images = f'{output_folder_base}/images'  # Verzeichnis für die Ausgabe der generierten Bilder
 image_gen_endpoint = 'https://api.openai.com/v1/images/generations'
 image_model_name = 'dall-e-3'
 
@@ -28,7 +30,7 @@ analysis_prompt = (
     "}"
     "]"
     "</json>"
-    "Wenn es innerhalb des analysierten Screenshots einer Webseite keine Bilder gibt oder du keine erkennen kannst, dann soll das JSON Objekt nur den Ihalt 'Keine Bilder gefunden' haben."
+    "Wenn es innerhalb des analysierten Screenshots einer Webseite keine Bilder gibt oder du keine erkennen kannst, dann soll das JSON Objekt nur den Inhalt 'Keine Bilder gefunden' haben."
     "Du darfst keine externen Quellen konsultieren und sollst keine unsicheren oder ungenauen Daten verwenden. Stelle sicher, dass der HTML-Code gut strukturiert ist und den modernen Webstandards entspricht. Das benötigte CSS wird als Inline-CSS im Head des HTML eingefügt."
     "Deine Antwort ist immer valides HTML, das immer mit <html> beginnt und mit </html> endet. Du darfst auf keinen Fall gegen diese Regel verstossen."
     "Beschreibe die Bilder ausschließlich in Stichpunkten. Du darfst nicht vom Thema abweichen, wiederhole keine Informationen und vermeide unnötige Details. Du bist ausschließlich auf die Analyse des Screenshots und Code-Erstellung fokussiert. Füge am Ende des HTML-Codes einen Script-Block hinzu, der die Beschreibungen der identifizierten Bilder im JSON-Format enthält. Du antwortest ausschließlich in validem HTML, deine Antwort muss immer mit <html> beginnen und mit </html> enden. Ekläre nichts, deine Antwort besteht nur aus dem gewünschten Code."
@@ -41,8 +43,35 @@ image_gen_prompt = (
     "Vermeide jegliche unscharfe oder irrelevante Darstellung und konzentriere dich ausschließlich auf die gegebene Beschreibung."
 )
 
+encoder = tiktoken.get_encoding("cl100k_base")
+
+def count_tokens(text):
+    return len(encoder.encode(text))
+
+def log_token_count(step, text):
+    token_count = count_tokens(text)
+    with open("token_counts.log", "a") as log_file:
+        log_file.write(f"{step}: {token_count} tokens\n")
+    print(f"{step}: {token_count} tokens")
+    return token_count
+
+def create_required_directories():
+    # Überprüft und erstellt das Basisverzeichnis für die Ausgabe
+    if not os.path.exists(output_folder_base):
+        os.makedirs(output_folder_base)
+        print(f"Basisverzeichnis erstellt: {output_folder_base}")
+    else:
+        print(f"Basisverzeichnis existiert bereits: {output_folder_base}")
+
+    # Überprüft und erstellt das Verzeichnis für die Ausgabe der generierten Bilder
+    if not os.path.exists(output_folder_images):
+        os.makedirs(output_folder_images)
+        print(f"Bilderverzeichnis erstellt: {output_folder_images}")
+    else:
+        print(f"Bilderverzeichnis existiert bereits: {output_folder_images}")
+
 def load_image(image_path):
-    # Open and display the image for context
+    # Bild zur Kontextdarstellung öffnen und anzeigen
     display(IPythonImage(filename=image_path))
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
@@ -52,71 +81,71 @@ def send_image_to_chatgpt(image_data):
     data = {
         "model": model_name,
         "messages": [
-            {
-                "role": "system",
-                "content": analysis_prompt
-            },
-            {
-                "role": "user",
-                "content": f"data:image/png;base64,{image_data}"  # Changed this line
-            }
+            {"role": "system", "content": analysis_prompt},
+            {"role": "user", "content": f"data:image/png;base64,{image_data}"}
         ]
     }
-    #print("Gesendete Daten an ChatGPT API:")
-    #print(data)  # Zeige die gesendeten Daten für Debugging-Zwecke
+    print(f"Image data length: {len(image_data)}")
+    log_token_count("Request before sending to API", str(data))
     response = requests.post(chatgpt_endpoint, headers=headers, json=data)
+    log_token_count("Response from API", str(response.json()))
     print("Erhaltene Antwort von ChatGPT API:")
-    print(response.json())  # Zeige die komplette Antwort
+    print(response.json())
     return response.json()
 
+def save_base64_image(base64_data, output_path):
+    with open(output_path, "wb") as image_file:
+        image_file.write(base64.b64decode(base64_data))
+
+def get_base64_image_data(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
+
+
+# Pfade zu den neu gespeicherten Bildern
+image_path_1 = os.path.join(images_folder, 'resaved-sample-1.jpg')
+image_path_2 = os.path.join(images_folder, 'resaved-sample-3.jpg')
+
+# Base64-Daten der neu gespeicherten Bilder
+image_data_1 = get_base64_image_data(image_path_1)
+image_data_2 = get_base64_image_data(image_path_2)
+
+# Speichern der Base64-kodierten Bilder zur Überprüfung
+base64_image_path_1 = os.path.join(images_folder, 'base64_resaved_sample_1.jpg')
+base64_image_path_2 = os.path.join(images_folder, 'base64_resaved_sample_3.jpg')
+
+save_base64_image(image_data_1, base64_image_path_1)
+save_base64_image(image_data_2, base64_image_path_2)
+
 def create_html_file(html_content, file_number):
-    file_path = f"sample-{file_number:02}.html"
+    file_path = f"{output_folder_base}/sample-{file_number:02}.html"
     with open(file_path, "w") as file:
         file.write(html_content)
-    print(f"HTML gespeichert: {file_path}")
+    print(f"HTML-Datei gespeichert: {file_path}")
     return file_path
 
 def generate_image_from_prompt(prompt, file_number):
-    print(f"Generiere Bild aus Prompt: {prompt}")
     headers = {'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'}
-    data = {
-        "model": image_model_name,
-        "prompt": f"{image_gen_prompt} {prompt}"
-    }
-    print("Gesendete Daten für Bildgenerierung:")
-    print(data)  # Zeige die gesendeten Daten
+    data = {"model": image_model_name, "prompt": f"{image_gen_prompt} {prompt}"}
+    log_token_count("Generate Image Request", str(data))
     response = requests.post(image_gen_endpoint, headers=headers, json=data)
-    print("Erhaltene Antwort von der Bildgenerierungs-API:")
-    print(response.json())  # Zeige die komplette Antwort
-    if response.status_code == 200:
-        image_data = response.json().get('image')
-        if image_data:
-            image_path = f"{output_folder}/sample-{file_number:02}-image-{file_number:02}.jpg"
-            with open(image_path, "wb") as img_file:
-                img_file.write(base64.b64decode(image_data))
-            print(f"Bild generiert und gespeichert: {image_path}")
-            return image_path
-        else:
-            print("Fehler: Kein Bild in der Antwort.")
+    log_token_count("Generate Image Response", str(response.json()))
+    print("Antwort von der Bildgenerierungs-API erhalten:")
+    print(response.json())
+    if response.status_code == 200 and 'image' in response.json():
+        image_data = response.json()['image']
+        image_path = f"{output_folder_base}/sample-{file_number:02}-image-{file_number:02}.jpg"
+        with open(image_path, "wb") as img_file:
+            img_file.write(base64.b64decode(image_data))
+        print(f"Bild generiert und gespeichert: {image_path}")
+        return image_path
     else:
-        print(f"Fehler bei der Bildgenerierung: HTTP-Status {response.status_code}")
-    return None
-
-def create_required_directories():
-    directories_created = False
-    if not os.path.exists(images_folder):
-        os.makedirs(images_folder)
-        directories_created = True
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
-        directories_created = True
-    return directories_created
+        print("Fehler: Kein Bild in der Antwort.")
+        return None
 
 def main():
     print("Starte das Skript...")
-    if create_required_directories():
-        print("Ordner waren nicht vorhanden und wurden erzeugt. Bitte lade Bilder in das Verzeichnis und starte das Script neu.")
-        sys.exit()
+    create_required_directories()
 
     images = os.listdir(images_folder)
     if not images:
@@ -129,7 +158,12 @@ def main():
         image_data = load_image(image_path)
 
         print(f"Sende Bild {image_name} zur Analyse...")
+        token_count_before = log_token_count("Token count before sending image to API", image_data)
         result = send_image_to_chatgpt(image_data)
+        token_count_after = log_token_count("Token count after receiving response from API", str(result))
+
+        print(f"Token count before sending to API: {token_count_before}")
+        print(f"Token count after receiving response: {token_count_after}")
 
         if 'choices' in result and result['choices']:
             html_content = result['choices'][0]['message']['content']
@@ -150,17 +184,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-#analysis_prompt = (
-#    "Du bist WebUIAnalyzer GPT, ein Fachmann in der Erstellung und Analyse von Webseiten."
-#    "Deine Expertise umfasst HTML und CSS. Du bist angehalten, Webseiten-Screenshots präzise zu analysieren. "
-#    "Erstelle auf Basis des bereitgestellten Bildes sauber formatierten HTML-Code. "
-#    "Analysiere das Bild gründlich und erstelle HTML, das der Struktur und dem Inhalt des Bildes entspricht. "
-#    "Identifiziere außerdem alle darin enthaltenen Bilder und beschreibe diese in klaren, präzisen Stichpunkten. "
-#    "Du darfst keine externen Quellen konsultieren und sollst keine unsicheren oder ungenauen Daten verwenden. "
-#    "Stelle sicher, dass der HTML-Code gut strukturiert ist und den modernen Webstandards entspricht. "
-#    "Beschreibe die Bilder ausschließlich in Stichpunkten. Du darfst nicht vom Thema abweichen, "
-#    "wiederhole keine Informationen und vermeide unnötige Details. "
-#    "Du bist ausschließlich auf die Analyse und Code-Erstellung fokussiert."
-#)
