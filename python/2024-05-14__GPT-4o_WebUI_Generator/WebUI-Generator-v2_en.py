@@ -8,7 +8,8 @@ Konfiguration / Settings
 """
 ############################################################################################################
 
-api_key = 'YOUR_API_KEY'
+# Konfiguration
+#api_key = 'YOUR_API_KEY'
 
 #Standard endpoint for chat
 #Through model gpt-4o but without direct call to Vision API
