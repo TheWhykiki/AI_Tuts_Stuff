@@ -37,7 +37,7 @@
 
 4. Um den WebUI Generator zu starten, verwenden Sie den folgenden Befehl in Ihrem Terminal oder Eingabeaufforderung:
     ```bash
-    python WebUI-Generator-v2.py
+    python WebUI-Generator-v3.py
     ```
    
 ### Hinweise:
@@ -46,3 +46,10 @@
 Stellen Sie sicher, dass Sie die virtuelle Umgebung aktiviert haben, in der die Abhängigkeiten installiert sind, bevor Sie das Skript ausführen. Wenn Probleme mit fehlenden Modulen auftreten, überprüfen Sie nochmals, ob die virtuelle Umgebung aktiviert ist und alle Abhängigkeiten korrekt installiert sind.
 
 Das Skript erwartet, dass die Bilder über die im Code angegebenen URLs zugänglich sind. Wenn die Bilder nicht zugänglich sind, funktioniert das Skript nicht korrekt. Passen Sie die base_url und andere Konfigurationen im Skript nach Bedarf an, um sie an Ihr Projektsetup anzupassen.
+
+## Wichtige Hinweise
+
+Funktioniert haben alle Versionen auf die eine Art und Weise, ich hatte allerdings das Bildgenerierungsfeature nicht komplett implementiert.
+Daher habe ich es in Version v3 ausgebaut, um in erster Linie zu prüfen, ob die Quell-Screenshots überhaupt erkannt werden.
+Weitere Infos dazu findet ihr auch in meinem Video dazu:
+

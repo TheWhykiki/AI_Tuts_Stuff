@@ -1,2 +1,14 @@
+# Packages for resaveImages.py
+PIL==8.2.0  # Pillow for image manipulation
+#tiktoken
+
+# Packages for testImages.py
+matplotlib==3.4.2  # for displaying images
+
+# Packages for tokensImages.py
+#tiktoken, siehe resave
+
+# Packages for WebUI-Generator-v3.py
 requests
-ipython
+IPython
+tiktoken

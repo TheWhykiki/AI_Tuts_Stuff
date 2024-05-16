@@ -3,64 +3,98 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f0f0ff;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #3b3b98;
+        }
+        p {
+            color: #888;
+        }
+        .blog-link {
+            color: #6c63ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .cards {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 30%;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .card img {
+            width: 100%;
+            height: auto;
+        }
+        .card-content {
+            padding: 20px;
+        }
+        .card-date {
+            color: #bbb;
+            margin-bottom: 10px;
+        }
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin: 0 0 15px;
+        }
+        .card-link {
+            color: #6c63ff;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
-    <section>
-        <h2>Main Hero Section</h2>
-        <p>Description of the main hero section content, explaining the services or featured topics.</p>
-    </section>
-    
-    <section>
-        <h2>Service Details</h2>
-        <div>
-            <h3>Service 1</h3>
-            <p>Detailed explanation about service 1.</p>
+    <div class="container">
+        <h1>Latest News</h1>
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut.</p>
+        <a href="#" class="blog-link">Visit Our Blog &rarr;</a>
+        <div class="cards">
+            <div class="card">
+                <img src="image1.jpg" alt="Performance Testing">
+                <div class="card-content">
+                    <div class="card-date">02 February, 2021</div>
+                    <div class="card-title">The Ultimate Guide to Performance Testing</div>
+                    <a href="#" class="card-link">Read more &rarr;</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="image2.jpg" alt="User Data Analysis">
+                <div class="card-content">
+                    <div class="card-date">01 February, 2021</div>
+                    <div class="card-title">How to Analyze User Data to Understand Your Potential Buyers</div>
+                    <a href="#" class="card-link">Read more &rarr;</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="image3.jpg" alt="IT Industry">
+                <div class="card-content">
+                    <div class="card-date">01 February, 2021</div>
+                    <div class="card-title">6 Ways Coronavirus Changed the IT Industry Forever</div>
+                    <a href="#" class="card-link">Read more &rarr;</a>
+                </div>
+            </div>
         </div>
-        <div>
-            <h3>Service 2</h3>
-            <p>Detailed explanation about service 2.</p>
-        </div>
-        <div>
-            <h3>Service 3</h3>
-            <p>Detailed explanation about service 3.</p>
-        </div>
-    </section>
-    
-    <section>
-        <h2>Additional Information</h2>
-        <p>Extra information that supports the main content, such as testimonials or case studies.</p>
-    </section>
-    
-    <footer>
-        <p>Contact information and social media links.</p>
-    </footer>
+    </div>
 </body>
 </html>
-
-<script>
-    const images = [
-        {
-            'id': 1,
-            'description': 'Full-width hero banner image, abstract background with focus central text',
-            'format': 'wide'
-        },
-        {
-            'id': 2,
-            'description': 'Icon image for service 1, simple and professional looking',
-            'format': 'square'
-        },
-        {
-            'id': 3,
-            'description': 'Icon image for service 2, simple and professional looking',
-            'format': 'square'
-        },
-        {
-            'id': 4,
-            'description': 'Icon image for service 3, simple and professional looking',
-            'format': 'square'
-        }
-    ];
-    console.log(JSON.stringify(images));
-</script>

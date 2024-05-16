@@ -6,15 +6,14 @@ from IPython.display import Image as IPythonImage, display
 import tiktoken
 
 # Konfiguration
-api_key = 'sk-proj-LhQYuBWERSvVtKInHGhVT3BlbkFJ0yX805EprKcDGgSupH5S'
+api_key = 'YOUR_API_KEY'
 
 chatgpt_endpoint = "https://api.openai.com/v1/chat/completions"
 model_name = 'gpt-4o'
 images_folder = 'resaved-sources'
-output_folder_base = 'generator_output-klappte'  # Basisverzeichnis für die Ausgabe
+output_folder_base = 'generator_output'  # Basisverzeichnis für die Ausgabe
 output_folder_images = f'{output_folder_base}/images'  # Verzeichnis für die Ausgabe der generierten Bilder
-image_gen_endpoint = 'https://api.openai.com/v1/images/generations'
-image_model_name = 'dall-e-3'
+
 
 analysis_prompt = (
     "Du bist WebUIAnalyzer GPT, ein Fachmann in der Erstellung und Analyse von Webseiten. Deine Expertise umfasst HTML, JS und CSS. Du bist angehalten, Webseiten-Screenshots präzise zu analysieren. Erstelle auf Basis des bereitgestellten Bildes sauber formatierten HTML-Code. Analysiere das Bild gründlich und erstelle HTML, das der Struktur und dem Inhalt des Bildes entspricht. "

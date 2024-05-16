@@ -1,52 +1,81 @@
-```html
 <html>
 <head>
     <style>
         body {
             font-family: Arial, sans-serif;
-        }
-        .header {
-            background-color: #f8f9fa;
-            padding: 20px;
             text-align: center;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
         }
         .container {
-            margin: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         h1 {
-            font-size: 24px;
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 20px;
         }
-        p {
-            font-size: 16px;
-            line-height: 1.5;
+        .cards {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
         }
-        .image {
-            text-align: center;
-            margin: 20px 0;
+        .card {
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            padding: 20px;
+            width: 45%;
+        }
+        .card:nth-child(2) {
+            background: linear-gradient(135deg, #2A5298, #1e3c72);
+            color: #fff;
+        }
+        .card h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .card p {
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+        .card button {
+            background-color: #fff;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .card:nth-child(2) button {
+            background-color: #fff;
+            color: #333;
+        }
+        .card button:hover {
+            background: #f0f0f0;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Welcome to My Website</h1>
-    </div>
     <div class="container">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac vestibulum erat. Cras vehicula lectus risus, in consectetur nulla tincidunt a. Morbi pellentesque ligula vel magna convallis tempor.</p>
-        <div class="image">
-            <img src="data:image/png;base64,..." alt="Placeholder Image">
+        <h1>Reinvent Your Business With DevStack Solutions</h1>
+        <div class="cards">
+            <div class="card">
+                <h2>Ship Faster with the Leading DevOps Platform</h2>
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr dolore magna aliquyam erat, sed diam voluptua.</p>
+                <button>View Features</button>
+            </div>
+            <div class="card">
+                <h2>Endless Benefits with DevStack Enterprise</h2>
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr dolore magna aliquyam erat, sed diam voluptua.</p>
+                <button>View Enterprise</button>
+            </div>
         </div>
-        <p>Phasellus volutpat, massa eu convallis auctor, nisi nunc aliquet eros, quis hendrerit mi quam quis sapien. Aenean ac ligula ut orci feugiat cursus. Proin scelerisque nulla sed ligula varius, non venenatis libero tincidunt.</p>
     </div>
-    <script type="application/json">
-        {
-            "images": [
-                {
-                    "id": 1,
-                    "description": "Placeholder Image, unknown format"
-                }
-            ]
-        }
-    </script>
 </body>
 </html>
-```

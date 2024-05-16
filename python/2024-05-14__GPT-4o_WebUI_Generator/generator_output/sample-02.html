@@ -1,66 +1,134 @@
 <html>
 <head>
-<style>
-  body { 
-    font-family: Arial, sans-serif;
-    padding: 20px;
-  }
-  header {
-    background-color: #4CBB17;
-    color: white;
-    padding: 20px;
-  }
-  footer {
-    background-color: #333;
-    color: white;
-    padding: 10px;
-    text-align: center;
-  }
-  .content {
-    margin-top: 20px;
-  }
-  h1 {
-    color: #333;
-  }
-  img {
-    max-width: 100%;
-    height: auto;
-  }
-</style>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            font-size: 2em;
+        }
+        h2 {
+            text-align: center;
+            color: #888;
+            font-weight: normal;
+            font-size: 1.2em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f0f0f5;
+            color: #666;
+        }
+        td:last-child {
+            text-align: center;
+        }
+        .checkmark {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-color: #32CD32;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Unternehmen XYZ</h1>
-    <p>Willkommen auf unserer offiziellen Webseite!</p>
-  </header>
-  <div class="content">
-    <h1>Mission Statement</h1>
-    <p>Unser Ziel ist es, bahnbrechende Lösungen zu bieten, die den Alltag vereinfachen und die Zukunft innovativ mitgestalten.</p>
-  </div>
-  <footer>
-    &copy; 2023 Unternehmen XYZ. Alle Rechte vorbehalten.
-  </footer>
+    <div class="container">
+        <h1>Compare Plans</h1>
+        <h2>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</h2>
+        <table>
+            <tr>
+                <th>FEATURES</th>
+                <th>FREE</th>
+                <th>PROFESSIONAL</th>
+                <th>ENTERPRISE</th>
+            </tr>
+            <tr>
+                <td>Concurrency</td>
+                <td>1</td>
+                <td>100</td>
+                <td>Custom</td>
+            </tr>
+            <tr>
+                <td>Self-hosted Runners</td>
+                <td>-</td>
+                <td>-</td>
+                <td><div class="checkmark"></div></td>
+            </tr>
+            <tr>
+                <td>Build Machines</td>
+                <td>Standard</td>
+                <td>Standard</td>
+                <td>Elite</td>
+            </tr>
+            <tr>
+                <td>Build on</td>
+                <td>Linux, Windows and Arm</td>
+                <td>Linux, Windows, Arm and MacOS</td>
+                <td>GPU and largest compute</td>
+            </tr>
+            <tr>
+                <td>User Limit</td>
+                <td>Up to 3 Users</td>
+                <td>Up to 10 Users</td>
+                <td>Unlimited</td>
+            </tr>
+            <tr>
+                <td>Group Management</td>
+                <td>-</td>
+                <td><div class="checkmark"></div></td>
+                <td><div class="checkmark"></div></td>
+            </tr>
+            <tr>
+                <td>Single Sign-on (SAML SSO)</td>
+                <td>-</td>
+                <td>-</td>
+                <td><div class="checkmark"></div></td>
+            </tr>
+            <tr>
+                <td>Audit logs</td>
+                <td>Up to 200/Month</td>
+                <td>Up to 1000/Month</td>
+                <td>Unlimited</td>
+            </tr>
+            <tr>
+                <td>API Management</td>
+                <td>-</td>
+                <td>5000 Tokens</td>
+                <td>Unlimited</td>
+            </tr>
+            <tr>
+                <td>Premium Integrations</td>
+                <td>-</td>
+                <td>-</td>
+                <td><div class="checkmark"></div></td>
+            </tr>
+            <tr>
+                <td>Support</td>
+                <td>Community Support</td>
+                <td>Web-based Support</td>
+                <td>24/7 Premium Support</td>
+            </tr>
+        </table>
+    </div>
 </body>
-<script type="application/json">
-[{
-'id': 1,
-'description':'Text auf grünem Hintergrund, große Überschrift: Unternehmen XYZ, kleine Beschreibung darunter. Textgröße nicht bestimmbar, Bild ist im Querformat',
-'format': 'quer'
-},
-{
-'id': 2,
-'description':'Text auf Weiß, Überschrift: Mission Statement, darunter ein Absatz mit Text: Unser Ziel ist es... Textgröße nicht bestimmbar, Bild ist im Querformat',
-'format': 'quer'
-},
-{
-'id': 3,
-'description': 'Firmenlogo in der Navigation, kleines quadratisches Bild, stilisiertes Symbol',
-'format': 'quadratisch'
-},
-{
-'id': 4,
-'description': 'Footer-Bereich mit Text auf dunklem Hintergrund, Text beinhaltet Verweise und Copyrechte, Textgröße nicht bestimmbar, Bild ist im Querformat',
-'format': 'quer'
-}]
-</script>
 </html>
